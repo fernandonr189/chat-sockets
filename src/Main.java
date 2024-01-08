@@ -17,21 +17,14 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ServerThread serverThread = new ServerThread(serverSocket);
-        serverThread.start();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Server started");
-        ClientThread clientThread = new ClientThread(HOST, outgoing);
-        clientThread.start();
+
+        ServerListenThread serverListenThread = new ServerListenThread(serverSocket);
+        serverListenThread.start();
 
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();
-            outgoing.produce(message);
+            new ClientThread(HOST, message).start();
         }
     }
 }

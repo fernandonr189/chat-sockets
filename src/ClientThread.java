@@ -1,45 +1,28 @@
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class ClientThread extends Thread{
     private Socket socket;
+    private DataOutputStream dataOutputStream;
     private String host;
-    private MessagesBuffer messagesBuffer;
 
-    public ClientThread(String host, MessagesBuffer messagesBuffer) {
+    private String message;
+    public ClientThread(String host, String message) {
         this.host = host;
-        this.messagesBuffer = messagesBuffer;
-        try {
-            this.socket = new Socket(host, 8080);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.message = message;
     }
-
     @Override
     public void run() {
-        while(true) {
-            try {
-                this.socket = new Socket(host, 8080);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            DataOutputStream dataOutputStream;
-
-            try {
-                dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            String message = messagesBuffer.consume();
-
-            try {
-                dataOutputStream.writeUTF(message);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            socket = new Socket(host, 8080);
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            dataOutputStream.writeUTF(message);
+            dataOutputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
