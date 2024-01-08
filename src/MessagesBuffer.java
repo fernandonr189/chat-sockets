@@ -31,7 +31,6 @@ public class MessagesBuffer {
     public synchronized void produce(String newMessage) {
         messages.add(newMessage);
         isEmpty = false;
-        System.out.println(newMessage);
         notifyAll();
     }
 }

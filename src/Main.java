@@ -19,7 +19,12 @@ public class Main {
         }
         ServerThread serverThread = new ServerThread(serverSocket);
         serverThread.start();
-
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Server started");
         ClientThread clientThread = new ClientThread(HOST, outgoing);
         clientThread.start();
 
