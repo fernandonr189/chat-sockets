@@ -4,20 +4,20 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ClientThread extends Thread{
-    private Socket socket;
-    private DataOutputStream dataOutputStream;
-    private String host;
+    private final String host;
 
-    private String message;
-    public ClientThread(String host, String message) {
+    private final String message;
+    private final int port;
+    public ClientThread(String host, int port, String message) {
+        this.port = port;
         this.host = host;
         this.message = message;
     }
     @Override
     public void run() {
         try {
-            socket = new Socket(host, 8080);
-            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            Socket socket = new Socket(host, port);
+            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataOutputStream.writeUTF(message);
             dataOutputStream.close();
             socket.close();

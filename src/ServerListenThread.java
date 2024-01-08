@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class ServerListenThread extends Thread{
 
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     public ServerListenThread(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
@@ -12,13 +12,12 @@ public class ServerListenThread extends Thread{
     @Override
     public void run() {
         while(true) {
-            Socket socket = null;
             try {
-                socket = serverSocket.accept();
+                Socket socket = serverSocket.accept();
+                new ServerThread(socket).start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            new ServerThread(socket).start();
         }
     }
 }

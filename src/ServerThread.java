@@ -41,7 +41,7 @@ public class ServerThread extends Thread{
         }
 
         if(!message.isEmpty()) {
-            System.out.println("RECIBIDO: " + message);
+            System.out.println(message);
         }
         desconectar();
     }
